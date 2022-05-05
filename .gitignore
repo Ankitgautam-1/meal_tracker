@@ -1,0 +1,15 @@
+/client/meal_tracker/node_modules
+/server/node_modules
+/server/.env
+/server/Testing.rest
+/server/package.lock.json
+
+# production
+/client/meal_tracker/build
+/client/meal_tracker/package.lock.json
+# misc
+
+
+/client/meal_tracker/npm-debug.log*
+/client/meal_tracker/yarn-debug.log*
+/client/meal_tracker/yarn-error.log*
