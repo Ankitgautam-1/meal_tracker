@@ -3,22 +3,35 @@ import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 import { useNavigate } from "react-router-dom";
 import LoggedIn from "./LoggedIn";
+import { useDispatch } from "react-redux";
+import setUser from "../store/actions";
 
+interface User {
+  email: string;
+  username: string;
+  uid: String;
+}
 let axiosConfig = {
   headers: {
     "Content-Type": "application/json",
   },
 };
 const Login: React.FC = () => {
-  const [cookies, setCookie] = useCookies(["authenticated"]);
+  const dispatch = useDispatch();
+  const [cookies, setCookie] = useCookies([
+    "authenticated",
+    "username",
+    "email",
+    "uid",
+  ]);
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const navigate = useNavigate();
-  console.log(typeof cookies.authenticated);
 
   if (cookies.authenticated === "true") {
     return <LoggedIn />;
@@ -44,9 +57,20 @@ const Login: React.FC = () => {
         });
 
         setCookie("authenticated", true);
+        const data = result.data as User;
+        dispatch(
+          setUser({ email: data.email, username: data.username, uid: data.uid })
+        );
+        setCookie("username", data.username);
+        setCookie("email", data.email);
+        setCookie("uid", data.uid);
         navigate("/home");
       } else {
-        console.log(result.statusText);
+        toast.success(result.statusText, {
+          theme: "dark",
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+        });
       }
     } catch (error: unknown) {
       const mesage = error as AxiosError;
@@ -57,17 +81,16 @@ const Login: React.FC = () => {
         pauseOnFocusLoss: false,
         pauseOnHover: false,
       });
-      console.log(error);
     }
   };
   return (
     <div className="h-screen flex">
       <div
         className="hidden lg:flex w-full lg:w-1/2 
-          justify-around items-center"
+          justify-around items-center "
         style={{
           background:
-            " linear-gradient(rgba(2,2,2,.7),rgba(0,0,0,.7)),url(https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_960_720.jpg) center center",
+            " linear-gradient(rgba(2,2,2,.7),rgba(0,0,0,.7)),url(https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_960_720.jpg) center  ",
         }}
       >
         <div
@@ -167,15 +190,15 @@ const Login: React.FC = () => {
             >
               Login
             </button>
-            <div className="flex justify-between mt-4">
-              <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">
+            <div className="flex justify-between flex-col space-y-5 md:space-y-0 md:flex-row mt-4">
+              <span className="text-sm  hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all">
                 Forgot Password ?
               </span>
 
               <Link
                 to={"/signup"}
                 replace
-                className="hover:-translate-y-1 transition-all duration-500 hover:text-teal-700"
+                className="text-sm sm:test-xl hover:-translate-y-1 transition-all duration-500 hover:text-teal-700"
               >
                 Don't have an account yet?
               </Link>

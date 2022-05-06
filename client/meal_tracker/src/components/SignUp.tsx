@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoggedIn from "./LoggedIn";
 
-let axiosConfig = {
+export const axiosConfig = {
   headers: {
     "Content-Type": "application/json",
   },

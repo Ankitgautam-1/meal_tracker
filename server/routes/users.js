@@ -12,23 +12,38 @@ const getUsers = async (req, res) => {
     res.status(201).send(user.data);
   }
 };
+const signOut = async (req, res) => {
+  const result = await client.auth.signOut();
+
+  if (result.error === null) {
+    res.status(200).send("User Signed out");
+  } else {
+    res.status(500).send(result.error);
+  }
+};
 const signIn = async (req, res) => {
   const email = req.body.userDetails.email;
 
   const password = req.body.userDetails.password;
+  console.log(email, password);
   try {
     const user = await client.auth.signIn({
       email,
       password,
     });
+    const users = await client
+      .from("users")
+      .select("*")
+      .eq("uid", user.user.id);
     console.log("current user", client.auth.user());
-    if (user.user === null) {
+    if (users.body === null) {
       res.status(user.error.status).send(user.error.message);
       return;
     } else {
-      res.status(201).send(user.user);
+      res.status(201).send(users.body[0]);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -67,3 +82,4 @@ const addUser = async (req, res) => {
 export default getUsers;
 export const createUser = addUser;
 export const signInUser = signIn;
+export const signOutUser = signOut;

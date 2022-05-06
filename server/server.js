@@ -3,7 +3,11 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 const app = express();
 import dotenv from "dotenv";
-import getUsers, { createUser, signInUser } from "./routes/users.js";
+import getUsers, {
+  createUser,
+  signInUser,
+  signOutUser,
+} from "./routes/users.js";
 import bodyParser from "body-parser";
 dotenv.config();
 app.use(cors());
@@ -19,10 +23,21 @@ try {
         extended: true,
       })
     );
+    app.post("/getMealByDate", async (req, res) => {
+      const userId = req.body.userId;
+      const date = req.body.date;
+      console.log(userId, date);
+      const meals = await client
+
+        .from("meals")
+        .select("*")
+        .match({ user_uid: userId, Date: date });
+      res.send(meals.body);
+    });
     app.post("/getUser", getUsers);
     app.post("/signUpuser", createUser);
     app.post("/signInUser", signInUser);
-
+    app.get("/signOutUser", signOutUser);
     app.listen(PORT, () => {
       console.log(`Server is listening on ${PORT} `);
     });
