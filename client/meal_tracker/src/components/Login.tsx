@@ -106,12 +106,13 @@ const Login: React.FC = () => {
           </h1>
           <p className="text-white mt-1">The simplest app to use</p>
           <div className="flex justify-center lg:justify-start mt-6">
-            <a
-              href="/"
-              className="hover:bg-teal-700 hover:text-white hover:scale-110 transition-all duration-500 bg-white text-teal-800 mt-4 px-4 py-2 rounded-md font-bold mb-2"
+            <Link
+              to="/"
+              replace
+              className="hover:bg-teal-700 hover:text-teal-700  no-underline hover:scale-110 transition-all duration-500 bg-white text-teal-800 mt-4 px-4 py-2 rounded-md font-bold mb-2"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -198,7 +199,7 @@ const Login: React.FC = () => {
               <Link
                 to={"/signup"}
                 replace
-                className="text-sm sm:test-xl hover:-translate-y-1 transition-all duration-500 hover:text-teal-700"
+                className="text-sm sm:test-xl no-underline hover:-translate-y-1 transition-all duration-500 hover:text-teal-700"
               >
                 Don't have an account yet?
               </Link>

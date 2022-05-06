@@ -1,17 +1,19 @@
-
 import client from "../server";
 
-const getMealByUser = async (req, res) => {
-  const user = await client.from("users").select("*").eq("uid", req.body.id);
-  console.log(user);
-  if (user.error != null) {
-    res.status(user.error.message).send(user.error.message);
-  } else {
-    user.data.map((user) => {
-      console.log(user.meals);
-    });
-    res.status(201).send(user.data);
-  }
+const getMealByDate = async (req, res) => {
+  const userId = req.body.userId;
+  const date = req.body.date;
+  console.log(userId, date);
+  const meals = await client
+
+    .from("meals")
+    .select("*")
+    .match({ user_uid: userId, Date: date });
+  res.send(meals.body);
+};
+const editMeal = async (req, res) => {
+  const mealId = req.body.mealId;
+  client.from("meal");
 };
 
-export default getMealByUser;
+export default getMealByDate;

@@ -44,7 +44,7 @@ const signIn = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send(error);
+    res.status(500).send("user not found");
   }
 };
 
@@ -68,7 +68,9 @@ const addUser = async (req, res) => {
         if (result.error) {
           res.status(result.error.code).send(result.error.message);
         } else {
-          res.status(201).send(newuser);
+          res
+            .status(201)
+            .send({ uid: newuser.user.id, username: username, email: email });
         }
       } catch (e) {
         console.log(e);

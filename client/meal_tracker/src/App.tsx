@@ -86,20 +86,21 @@ const App = () => {
                       >
                         Logout
                       </button>
-                      <a
-                        href="/home"
-                        className="font-medium w-10 px-3 py-1 rounded-md  bg-teal-700 text-white hover:bg-teal-600"
+                      <Link
+                        to="/home"
+                        replace
+                        className="font-medium w-10 no-underline px-3 py-1 rounded-md  bg-teal-700 text-white hover:bg-teal-600"
                       >
                         Homepage
-                      </a>
+                      </Link>
                     </>
                   ) : (
-                    <a
-                      href="/login"
-                      className="font-medium text-teal-600 hover:text-teal-500"
+                    <Link
+                      to="/login"
+                      className="font-medium no-underline text-teal-600 hover:text-teal-500"
                     >
                       Login
-                    </a>
+                    </Link>
                   )}
                 </div>
               </nav>
@@ -119,19 +120,19 @@ const App = () => {
                 data in the cloud so you can change your mind and come back to.
                 Based on date.
               </p>
-              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                <div className="rounded-md shadow">
+              <div className=" sm:flex sm:justify-center lg:justify-start space-y-3 sm:space-y-0">
+                <div className="rounded-md">
                   <Link
                     to={cookies.authenticated === "true" ? "/home" : "/login"}
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 md:py-4 md:text-lg md:px-10"
+                    className="w-full flex items-center no-underline justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 md:py-4 md:text-lg md:px-10"
                   >
                     Get started
                   </Link>
                 </div>
-                <div className="mt-3 sm:mt-0 sm:ml-3">
+                <div className=" sm:ml-3">
                   <a
                     href="/"
-                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-teal-700 bg-teal-100 hover:bg-teal-200 md:py-4 md:text-lg md:px-10"
+                    className="w-full flex items-center no-underline justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-teal-700 bg-teal-100 hover:bg-teal-300 md:py-4 md:text-lg md:px-10"
                   >
                     Get the app
                   </a>

@@ -7,6 +7,8 @@ import { BiUserCircle } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoggedIn from "./LoggedIn";
+import setUser from "../store/actions";
+import { useDispatch } from "react-redux";
 
 export const axiosConfig = {
   headers: {
@@ -20,6 +22,7 @@ const SignUp: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setpassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   console.log(typeof cookies.authenticated);
 
   if (cookies.authenticated === "true") {
@@ -42,6 +45,7 @@ const SignUp: React.FC = () => {
       if (result.status === 201) {
         console.log(result.data);
         setCookie("authenticated", true);
+        dispatch(setUser(result.data));
         navigate("/home");
       } else {
         console.log(result.statusText);
@@ -155,7 +159,7 @@ const SignUp: React.FC = () => {
               <Link
                 to={"/login"}
                 replace
-                className="hover:-translate-y-1 transition-all duration-500 hover:text-teal-700"
+                className="hover:-translate-y-1 no-underline transition-all duration-500 hover:text-teal-700"
               >
                 Already have an account yet?
               </Link>
@@ -184,12 +188,12 @@ const SignUp: React.FC = () => {
           </h1>
           <p className="text-white mt-1">The simplest app to use</p>
           <div className="flex justify-center lg:justify-start mt-6">
-            <a
-              href="/"
-              className="hover:bg-teal-700 hover:text-white hover:scale-110 transition-all duration-500 bg-white text-teal-800 mt-4 px-4 py-2 rounded-md font-bold mb-2"
+            <Link
+              to="/"
+              className="hover:bg-teal-700 no-underline hover:text-white hover:scale-110 transition-all duration-500 bg-white text-teal-800 mt-4 px-4 py-2 rounded-md font-bold mb-2"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </div>

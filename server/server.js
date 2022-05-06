@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 const app = express();
+import { v4 } from "uuid";
 import dotenv from "dotenv";
 import getUsers, {
   createUser,
@@ -32,7 +33,91 @@ try {
         .from("meals")
         .select("*")
         .match({ user_uid: userId, Date: date });
-      res.send(meals.body);
+
+      if (meals.error === null) {
+        res.status(201).send(meals.body);
+      } else {
+        res.status(meals.status).send(meals.error);
+      }
+    });
+    app.post("/addMeal", async (req, res) => {
+      const userId = req.body.userId;
+      const date = req.body.date;
+      const text = req.body.text;
+      const cal = req.body.cal;
+      const result = await client.from("meals").insert({
+        meal_id: v4(),
+        Date: date,
+        text: text,
+        cal: cal,
+        user_uid: userId,
+      });
+      if (result.error === null) {
+        const meals = await client
+
+          .from("meals")
+          .select("*")
+          .match({ user_uid: userId, Date: date });
+        if (meals.error === null) {
+          res.status(201).send(meals.body);
+        } else {
+          res.status(meals.status).send(meals.error);
+        }
+      } else {
+        res.status(result.status).send(result.error);
+      }
+    });
+    app.post("/editMeal", async (req, res) => {
+      const mealId = req.body.mealId;
+      const userId = req.body.userId;
+      const date = req.body.date;
+      const text = req.body.text;
+      const cal = req.body.cal;
+      console.log(mealId, userId, text, cal);
+      const result = await client
+        .from("meals")
+        .update({
+          text: text,
+          cal: cal,
+        })
+        .match({ meal_id: mealId });
+      if (result.error === null) {
+        const meals = await client
+          .from("meals")
+          .select("*")
+          .match({ user_uid: userId, Date: date });
+        if (meals.error === null) {
+          res.status(201).send(meals.body);
+        } else {
+          res.status(meals.status).send(meals.error);
+        }
+      } else {
+        res.status(result.status).send("Something went wrong");
+      }
+    });
+    app.post("/deleteMeal", async (req, res) => {
+      const mealId = req.body.mealId;
+      const userId = req.body.userId;
+      const date = req.body.date;
+      console.log(mealId);
+      const result = await client.from("meals").delete().match({
+        meal_id: mealId,
+      });
+      if (result.error === null) {
+        const meals = await client
+
+          .from("meals")
+          .select("*")
+          .match({ user_uid: userId, Date: date });
+        console.log(meals);
+        if (meals.error === null) {
+          res.status(201).send(meals.data);
+        } else {
+          res.status(meals.status).send(meals.error);
+        }
+      } else {
+        res.status(result.status).send(result.error);
+      }
     });
     app.post("/getUser", getUsers);
     app.post("/signUpuser", createUser);
